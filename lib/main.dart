@@ -8,36 +8,13 @@ void main() {
 class Spotter extends StatelessWidget {
   Spotter({super.key});
 
-  DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay = DateTime.now();
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar:
             AppBar(backgroundColor: Colors.blue, title: const Text("Spotter")),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TableCalendar(
-                firstDay: DateTime.utc(2020, 1, 1),
-                lastDay: DateTime.utc(2030, 12, 31),
-                focusedDay: _focusedDay,
-                selectedDayPredicate: (day) {
-                  return isSameDay(_selectedDay, day);
-                },
-                onDaySelected: (selectedDay, focusedDay) {
-                  if (!isSameDay(_selectedDay, selectedDay)) {
-                    _selectedDay = selectedDay;
-                    _focusedDay = focusedDay;
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
+        body: CalenderView(),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () => {print("Pressed!")},
@@ -80,6 +57,48 @@ class Spotter extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CalenderView extends StatefulWidget {
+  CalenderView({
+    super.key,
+  });
+
+  @override
+  State<CalenderView> createState() => _CalenderViewState();
+}
+
+class _CalenderViewState extends State<CalenderView> {
+  DateTime _focusedDay = DateTime.now();
+
+  DateTime _selectedDay = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TableCalendar(
+            firstDay: DateTime.utc(2020, 1, 1),
+            lastDay: DateTime.utc(2030, 12, 31),
+            focusedDay: _focusedDay,
+            selectedDayPredicate: (day) {
+              return isSameDay(_selectedDay, day);
+            },
+            onDaySelected: (selectedDay, focusedDay) {
+              if (!isSameDay(_selectedDay, selectedDay)) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                });
+              }
+            },
+          ),
+        ],
       ),
     );
   }
