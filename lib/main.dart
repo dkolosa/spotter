@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -44,7 +46,8 @@ class Spotter extends StatelessWidget {
                 leading: const Icon(Icons.run_circle),
                 title: const Text("Exercises"),
                 onTap: () {
-                  print("goto Excersies");
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ExerciseView()));
                 },
               ),
               ListTile(
@@ -73,7 +76,6 @@ class CalenderView extends StatefulWidget {
 
 class _CalenderViewState extends State<CalenderView> {
   DateTime _focusedDay = DateTime.now();
-
   DateTime _selectedDay = DateTime.now();
 
   @override
@@ -97,6 +99,72 @@ class _CalenderViewState extends State<CalenderView> {
                 });
               }
             },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ExerciseView extends StatelessWidget {
+  const ExerciseView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Spotter Exercises"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text("Go back!"),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () => {print("Pressed!")},
+      ),
+    );
+  }
+}
+
+class UserView extends StatelessWidget {
+  const UserView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("User"),
+      ),
+      body: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+            child: TextField(
+              decoration: InputDecoration(
+                  border: UnderlineInputBorder(), labelText: "Name"),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+            child: TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                  border: UnderlineInputBorder(), labelText: "Name"),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+            child: TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                  border: UnderlineInputBorder(), labelText: "Name"),
+            ),
           ),
         ],
       ),
