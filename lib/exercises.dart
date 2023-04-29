@@ -7,10 +7,11 @@ class ExerciseView extends StatefulWidget {
   State<ExerciseView> createState() => _ExerciseViewState();
 }
 
+var exerciseList = <String>["Test1"];
+
 class _ExerciseViewState extends State<ExerciseView> {
   String label = "";
 
-  var exerciseList = <String>["Test1"];
   String name = "";
   String reps = "";
   String sets = "";
