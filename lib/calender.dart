@@ -24,7 +24,7 @@ class _CalenderViewState extends State<CalenderView> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             TableCalendar(
               firstDay: DateTime.utc(2010),

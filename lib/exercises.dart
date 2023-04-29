@@ -1,30 +1,53 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
 
-class ExerciseView extends StatelessWidget {
+class ExerciseView extends StatefulWidget {
   ExerciseView({super.key});
-  String? label = "";
+
+  @override
+  State<ExerciseView> createState() => _ExerciseViewState();
+}
+
+class _ExerciseViewState extends State<ExerciseView> {
+  String label = "";
+
+  var exerciseList = <String>["Test1"];
+  String name = "";
+  String reps = "";
+  String sets = "";
+  String weight = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Spotter Exercises"),
       ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[for (var item in exerciseList) Text(item)],
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () async {
-          var resultLabel = await _showTextInputDialog(context);
+          Map<int, String>? resultLabel = await _showTextInputDialog(context);
           if (resultLabel != null) {
-            label = resultLabel;
+            setState(() {
+              label =
+                  "Name: ${resultLabel[0]} Weight: ${resultLabel[1]} Sets: ${resultLabel[2]} Reps: ${resultLabel[3]}";
+              exerciseList.add(label);
+            });
           }
         },
       ),
     );
   }
 
-  final _textFieldController = TextEditingController();
+  final _textFieldControllerName = TextEditingController();
+  final _textFieldControllerSet = TextEditingController();
+  final _textFieldControllerReps = TextEditingController();
+  final _textFieldControllerWeight = TextEditingController();
 
-  Future<String?> _showTextInputDialog(BuildContext context) async {
+  Future<Map<int, String>?> _showTextInputDialog(BuildContext context) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -33,22 +56,22 @@ class ExerciseView extends StatelessWidget {
             content: SingleChildScrollView(
               child: ListBody(children: <Widget>[
                 TextField(
-                  controller: _textFieldController,
+                  controller: _textFieldControllerName,
                   decoration: const InputDecoration(hintText: "Name"),
                 ),
                 TextField(
                   keyboardType: TextInputType.number,
-                  controller: _textFieldController,
+                  controller: _textFieldControllerWeight,
                   decoration: const InputDecoration(hintText: "Weight (lb)"),
                 ),
                 TextField(
                   keyboardType: TextInputType.number,
-                  controller: _textFieldController,
+                  controller: _textFieldControllerSet,
                   decoration: const InputDecoration(hintText: "Sets"),
                 ),
                 TextField(
                   keyboardType: TextInputType.number,
-                  controller: _textFieldController,
+                  controller: _textFieldControllerReps,
                   decoration: const InputDecoration(hintText: "Reps"),
                 ),
               ]),
@@ -60,8 +83,14 @@ class ExerciseView extends StatelessWidget {
               ),
               ElevatedButton(
                 child: const Text('OK'),
-                onPressed: () =>
-                    Navigator.pop(context, _textFieldController.text),
+                onPressed: () => {
+                  Navigator.pop(context, {
+                    0: _textFieldControllerName.text,
+                    1: _textFieldControllerWeight.text,
+                    2: _textFieldControllerSet.text,
+                    3: _textFieldControllerReps.text
+                  }),
+                },
               ),
             ],
           );
