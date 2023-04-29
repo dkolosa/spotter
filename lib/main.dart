@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -8,8 +6,26 @@ void main() {
 }
 
 class Spotter extends StatelessWidget {
-  Spotter({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "Spotter",
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: StartPage(),
+    );
+  }
+}
 
+class StartPage extends StatefulWidget {
+  const StartPage({super.key});
+
+  @override
+  State<StartPage> createState() => _StartPageState();
+}
+
+class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -131,8 +147,8 @@ class ExerciseView extends StatelessWidget {
   }
 }
 
-class UserView extends StatelessWidget {
-  const UserView({super.key});
+class CreateUserView extends StatelessWidget {
+  const CreateUserView({super.key});
 
   @override
   Widget build(BuildContext context) {
