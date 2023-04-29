@@ -12,35 +12,41 @@ var exerciseList = <String>["Test1"];
 class _ExerciseViewState extends State<ExerciseView> {
   String label = "";
 
-  String name = "";
-  String reps = "";
-  String sets = "";
-  String weight = "";
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Spotter Exercises"),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[for (var item in exerciseList) Text(item)],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () async {
-          Map<int, String>? resultLabel = await _showTextInputDialog(context);
-          if (resultLabel != null) {
-            setState(() {
-              label =
-                  "Name: ${resultLabel[0]} Weight: ${resultLabel[1]} Sets: ${resultLabel[2]} Reps: ${resultLabel[3]}";
-              exerciseList.add(label);
-            });
-          }
-        },
-      ),
-    );
+        appBar: AppBar(
+          title: const Text("Spotter Exercises"),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () async {
+                  Map<int, String>? resultLabel =
+                      await _showTextInputDialog(context);
+                  if (resultLabel != null) {
+                    setState(() {
+                      label =
+                          "${resultLabel[0]}   Weight: ${resultLabel[1]}  Sets: ${resultLabel[2]}   Reps: ${resultLabel[3]}";
+                      exerciseList.add(label);
+                    });
+                  }
+                },
+                child: const Icon(Icons.add),
+              ),
+            )
+          ],
+        ),
+        body: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: exerciseList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              height: 50,
+              child: Text('${exerciseList[index]}'),
+            );
+          },
+        ));
   }
 
   final _textFieldControllerName = TextEditingController();
