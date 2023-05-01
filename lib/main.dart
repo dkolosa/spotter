@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'calender.dart';
 import 'createUser.dart';
 import 'exercises.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox('exerciseBox');
   runApp(Spotter());
 }
 

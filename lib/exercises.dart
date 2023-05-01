@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class ExerciseView extends StatefulWidget {
   ExerciseView({super.key});
-
   @override
   State<ExerciseView> createState() => _ExerciseViewState();
 }
 
 var exerciseList = <String>["Test1"];
+
+var box = Hive.box('exerciseBox');
 
 class _ExerciseViewState extends State<ExerciseView> {
   String label = "";
@@ -47,6 +49,32 @@ class _ExerciseViewState extends State<ExerciseView> {
             );
           },
         ));
+  }
+
+  _addExercise() async {
+    box.put('name', _textFieldControllerName.text);
+    box.put('weight', _textFieldControllerWeight.text);
+    box.put('sets', _textFieldControllerSet.text);
+    box.put('reps', _textFieldControllerReps.text)
+  }
+
+  _getExercise() async {
+
+    var name =box.get('name');
+
+    return name;
+  }
+
+  _updateExercise() async {
+
+    box.put('name', _textFieldControllerName.text);
+
+  }
+
+  _deleteExercise() async {
+
+    box.delete(_textFieldControllerName.text);
+
   }
 
   final _textFieldControllerName = TextEditingController();
