@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:spotter/model.dart';
 
 import 'calender.dart';
 import 'createUser.dart';
@@ -7,7 +8,9 @@ import 'exercises.dart';
 
 void main() async {
   await Hive.initFlutter();
-  await Hive.openBox('exerciseBox');
+  Hive.registerAdapter<Exercise>(ExerciseAdapter());
+  await Hive.openBox<Exercise>('exerciseBox');
+  // await Hive.openBox('userBox');
   runApp(Spotter());
 }
 

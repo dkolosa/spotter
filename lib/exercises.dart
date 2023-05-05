@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:spotter/model.dart';
 
 class ExerciseView extends StatefulWidget {
   ExerciseView({super.key});
@@ -9,7 +12,7 @@ class ExerciseView extends StatefulWidget {
 
 var exerciseList = <String>["Test1"];
 
-var box = Hive.box('exerciseBox');
+// var box = Hive.openBox<Exercise>('exerciseBox');
 
 class _ExerciseViewState extends State<ExerciseView> {
   String label = "";
@@ -26,7 +29,9 @@ class _ExerciseViewState extends State<ExerciseView> {
                 onTap: () async {
                   Map<int, String>? resultLabel =
                       await _showTextInputDialog(context);
+
                   if (resultLabel != null) {
+                    _addExercise();
                     setState(() {
                       label =
                           "${resultLabel[0]}   Weight: ${resultLabel[1]}  Sets: ${resultLabel[2]}   Reps: ${resultLabel[3]}";
@@ -52,35 +57,45 @@ class _ExerciseViewState extends State<ExerciseView> {
   }
 
   _addExercise() async {
-    box.put('name', _textFieldControllerName.text);
-    box.put('weight', _textFieldControllerWeight.text);
-    box.put('sets', _textFieldControllerSet.text);
-    box.put('reps', _textFieldControllerReps.text)
+    var exercise = Exercise(
+        _textFieldControllerName.text,
+        double.parse(_textFieldControllerWeight.text),
+        int.parse(_textFieldControllerSet.text),
+        int.parse(_textFieldControllerReps.text),
+        _textFieldControllerMuscle.text);
+    var box = Hive.box<Exercise>('exerciseBox');
+    box.add(exercise);
   }
 
   _getExercise() async {
-
-    var name =box.get('name');
-
+    var box = Hive.box<Exercise>('exerciseBox');
+    var name = box.get('name');
     return name;
   }
 
+  _getExercises() async {
+    var box = Hive.box<Exercise>('exerciseBox');
+    var allExercies = box.values;
+    allExercies.toString();
+    print(allExercies);
+    return allExercies;
+  }
+
   _updateExercise() async {
-
-    box.put('name', _textFieldControllerName.text);
-
+    var box = Hive.box<Exercise>('exerciseBox');
   }
 
   _deleteExercise() async {
+    var box = Hive.box<Exercise>('exerciseBox');
 
     box.delete(_textFieldControllerName.text);
-
   }
 
   final _textFieldControllerName = TextEditingController();
   final _textFieldControllerSet = TextEditingController();
   final _textFieldControllerReps = TextEditingController();
   final _textFieldControllerWeight = TextEditingController();
+  final _textFieldControllerMuscle = TextEditingController();
 
   Future<Map<int, String>?> _showTextInputDialog(BuildContext context) async {
     return showDialog(
@@ -109,6 +124,11 @@ class _ExerciseViewState extends State<ExerciseView> {
                   controller: _textFieldControllerReps,
                   decoration: const InputDecoration(hintText: "Reps"),
                 ),
+                TextField(
+                  keyboardType: TextInputType.text,
+                  controller: _textFieldControllerMuscle,
+                  decoration: const InputDecoration(hintText: "Muscle Group"),
+                ),
               ]),
             ),
             actions: <Widget>[
@@ -123,7 +143,8 @@ class _ExerciseViewState extends State<ExerciseView> {
                     0: _textFieldControllerName.text,
                     1: _textFieldControllerWeight.text,
                     2: _textFieldControllerSet.text,
-                    3: _textFieldControllerReps.text
+                    3: _textFieldControllerReps.text,
+                    4: _textFieldControllerMuscle.text,
                   }),
                 },
               ),
