@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:spotter/model.dart';
@@ -10,13 +8,12 @@ class ExerciseView extends StatefulWidget {
   State<ExerciseView> createState() => _ExerciseViewState();
 }
 
-var exerciseList = <String>["Test1"];
+// var exerciseList = <String>["Test1"];
 
 // var box = Hive.openBox<Exercise>('exerciseBox');
-
 class _ExerciseViewState extends State<ExerciseView> {
   String label = "";
-
+  // var List<Exercise> exerciseList;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,16 +24,21 @@ class _ExerciseViewState extends State<ExerciseView> {
               padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 onTap: () async {
+                  _deleteExercise();
+                  setState(() {});
+                },
+                child: const Icon(Icons.delete_forever),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () async {
                   Map<int, String>? resultLabel =
                       await _showTextInputDialog(context);
-
                   if (resultLabel != null) {
                     _addExercise();
-                    setState(() {
-                      label =
-                          "${resultLabel[0]}   Weight: ${resultLabel[1]}  Sets: ${resultLabel[2]}   Reps: ${resultLabel[3]}";
-                      exerciseList.add(label);
-                    });
+                    setState(() {});
                   }
                 },
                 child: const Icon(Icons.add),
@@ -45,12 +47,23 @@ class _ExerciseViewState extends State<ExerciseView> {
           ],
         ),
         body: ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: exerciseList.length,
+          padding: const EdgeInsets.all(3),
+          itemCount: _getExercises().length,
           itemBuilder: (BuildContext context, int index) {
-            return Container(
+            var exerciseList = _getExercises();
+            var name = exerciseList.elementAt(index).name;
+            var weight = exerciseList.elementAt(index).weight.toString();
+            var reps = exerciseList.elementAt(index).sets.toString();
+            var sets = exerciseList.elementAt(index).reps.toString();
+            return SizedBox(
               height: 50,
-              child: Text('${exerciseList[index]}'),
+              child: Text(
+                '${name},   ${weight} lbs,   Sets:${sets},   Reps:${reps}',
+                textScaleFactor: 1.5,
+                style: const TextStyle(
+                  letterSpacing: 1.5,
+                ),
+              ),
             );
           },
         ));
@@ -73,11 +86,9 @@ class _ExerciseViewState extends State<ExerciseView> {
     return name;
   }
 
-  _getExercises() async {
+  _getExercises() {
     var box = Hive.box<Exercise>('exerciseBox');
-    var allExercies = box.values;
-    allExercies.toString();
-    print(allExercies);
+    final allExercies = box.values;
     return allExercies;
   }
 
@@ -87,8 +98,7 @@ class _ExerciseViewState extends State<ExerciseView> {
 
   _deleteExercise() async {
     var box = Hive.box<Exercise>('exerciseBox');
-
-    box.delete(_textFieldControllerName.text);
+    box.deleteAll(box.keys);
   }
 
   final _textFieldControllerName = TextEditingController();
