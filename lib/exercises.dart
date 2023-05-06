@@ -60,26 +60,25 @@ class _ExerciseViewState extends State<ExerciseView> {
             var weight = exerciseList.elementAt(index).weight.toString();
             var reps = exerciseList.elementAt(index).sets.toString();
             var sets = exerciseList.elementAt(index).reps.toString();
-            return Row(
-              children: <Widget>[
-                SizedBox(
-                  height: 50,
-                  child: Text(
-                    '${name},  ${weight} lbs,  Sets:${sets},  Reps:${reps}',
-                    textScaleFactor: 1.0,
-                    style: const TextStyle(
-                      letterSpacing: 1.0,
-                    ),
+            return GestureDetector(
+              onDoubleTap: () async {
+                print("Editing Exercise ${index.toString()}");
+                var updated_values = await _showTextInputDialog(context);
+                _updateExercise(index, updated_values);
+                setState(() {});
+              },
+              child: Container(
+                child: Text(
+                  '${name},  ${weight} lbs,  Sets:${sets},  Reps:${reps}',
+                  textScaleFactor: 1.0,
+                  style: const TextStyle(
+                    letterSpacing: 1.0,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    margin: const EdgeInsets.all(5.0),
-                    child: const Icon(Icons.edit),
-                  ),
-                ),
-              ],
+                padding: const EdgeInsets.all(8),
+                width: 150,
+                height: 40,
+              ),
             );
           },
         ));
@@ -92,15 +91,14 @@ class _ExerciseViewState extends State<ExerciseView> {
       int.parse(_textFieldControllerSet.text),
       int.parse(_textFieldControllerReps.text),
       _textFieldControllerMuscle.text,
-      DateTime.now(),
     );
     var box = Hive.box<Exercise>('exerciseBox');
     box.add(exercise);
   }
 
-  _getExercise(exerciseName) {
+  _getExercise(exerciseID) {
     var box = Hive.box<Exercise>('exerciseBox');
-    var name = box.get(exerciseName);
+    var name = box.get(exerciseID);
     return name;
   }
 
@@ -110,8 +108,17 @@ class _ExerciseViewState extends State<ExerciseView> {
     return allExercies;
   }
 
-  _updateExercise() {
+  _updateExercise(index, updatedValues) async {
     var box = Hive.box<Exercise>('exerciseBox');
+
+    var updatedExercise = Exercise(
+      updatedValues[0],
+      double.parse(updatedValues[1]),
+      int.parse(updatedValues[2]),
+      int.parse(updatedValues[3]),
+      updatedValues[4],
+    );
+    box.putAt(index, updatedExercise);
   }
 
   _deleteExercise() {
@@ -125,7 +132,8 @@ class _ExerciseViewState extends State<ExerciseView> {
   final _textFieldControllerWeight = TextEditingController();
   final _textFieldControllerMuscle = TextEditingController();
 
-  Future<Map<int, String>?> _showTextInputDialog(BuildContext context) async {
+  Future<Map<int, String>?> _showTextInputDialog(BuildContext context,
+      {currentValues}) async {
     return showDialog(
         context: context,
         builder: (context) {

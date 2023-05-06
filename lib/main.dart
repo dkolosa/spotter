@@ -43,8 +43,13 @@ class _StartPageState extends State<StartPage> {
             AppBar(backgroundColor: Colors.blue, title: const Text("Spotter")),
         body: const Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text("Today's Routine:")],
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "Today's Routine:",
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
