@@ -21,7 +21,11 @@ class Exercise {
   @HiveField(4)
   String muscleGroups = "";
 
-  Exercise(this.name, this.weight, this.sets, this.reps, this.muscleGroups);
+  @HiveField(5)
+  DateTime createdDate = DateTime.now();
+
+  Exercise(this.name, this.weight, this.sets, this.reps, this.muscleGroups,
+      this.createdDate);
 }
 
 @HiveType(typeId: 2)

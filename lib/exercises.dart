@@ -38,6 +38,11 @@ class _ExerciseViewState extends State<ExerciseView> {
                       await _showTextInputDialog(context);
                   if (resultLabel != null) {
                     _addExercise();
+                    _textFieldControllerName.clear();
+                    _textFieldControllerReps.clear();
+                    _textFieldControllerSet.clear();
+                    _textFieldControllerWeight.clear();
+                    _textFieldControllerMuscle.clear();
                     setState(() {});
                   }
                 },
@@ -47,7 +52,7 @@ class _ExerciseViewState extends State<ExerciseView> {
           ],
         ),
         body: ListView.builder(
-          padding: const EdgeInsets.all(3),
+          padding: const EdgeInsets.all(2),
           itemCount: _getExercises().length,
           itemBuilder: (BuildContext context, int index) {
             var exerciseList = _getExercises();
@@ -55,34 +60,47 @@ class _ExerciseViewState extends State<ExerciseView> {
             var weight = exerciseList.elementAt(index).weight.toString();
             var reps = exerciseList.elementAt(index).sets.toString();
             var sets = exerciseList.elementAt(index).reps.toString();
-            return SizedBox(
-              height: 50,
-              child: Text(
-                '${name},   ${weight} lbs,   Sets:${sets},   Reps:${reps}',
-                textScaleFactor: 1.5,
-                style: const TextStyle(
-                  letterSpacing: 1.5,
+            return Row(
+              children: <Widget>[
+                SizedBox(
+                  height: 50,
+                  child: Text(
+                    '${name},  ${weight} lbs,  Sets:${sets},  Reps:${reps}',
+                    textScaleFactor: 1.0,
+                    style: const TextStyle(
+                      letterSpacing: 1.0,
+                    ),
+                  ),
                 ),
-              ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    margin: const EdgeInsets.all(5.0),
+                    child: const Icon(Icons.edit),
+                  ),
+                ),
+              ],
             );
           },
         ));
   }
 
-  _addExercise() async {
+  _addExercise() {
     var exercise = Exercise(
-        _textFieldControllerName.text,
-        double.parse(_textFieldControllerWeight.text),
-        int.parse(_textFieldControllerSet.text),
-        int.parse(_textFieldControllerReps.text),
-        _textFieldControllerMuscle.text);
+      _textFieldControllerName.text,
+      double.parse(_textFieldControllerWeight.text),
+      int.parse(_textFieldControllerSet.text),
+      int.parse(_textFieldControllerReps.text),
+      _textFieldControllerMuscle.text,
+      DateTime.now(),
+    );
     var box = Hive.box<Exercise>('exerciseBox');
     box.add(exercise);
   }
 
-  _getExercise() async {
+  _getExercise(exerciseName) {
     var box = Hive.box<Exercise>('exerciseBox');
-    var name = box.get('name');
+    var name = box.get(exerciseName);
     return name;
   }
 
@@ -92,11 +110,11 @@ class _ExerciseViewState extends State<ExerciseView> {
     return allExercies;
   }
 
-  _updateExercise() async {
+  _updateExercise() {
     var box = Hive.box<Exercise>('exerciseBox');
   }
 
-  _deleteExercise() async {
+  _deleteExercise() {
     var box = Hive.box<Exercise>('exerciseBox');
     box.deleteAll(box.keys);
   }

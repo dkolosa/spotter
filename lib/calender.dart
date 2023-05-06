@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import "main.dart";
-
 class CalenderView extends StatefulWidget {
   CalenderView({
     super.key,
