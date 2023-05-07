@@ -38,11 +38,7 @@ class _ExerciseViewState extends State<ExerciseView> {
                       await _showTextInputDialog(context);
                   if (resultLabel != null) {
                     _addExercise();
-                    _textFieldControllerName.clear();
-                    _textFieldControllerReps.clear();
-                    _textFieldControllerSet.clear();
-                    _textFieldControllerWeight.clear();
-                    _textFieldControllerMuscle.clear();
+                    _clearTextBox();
                     setState(() {});
                   }
                 },
@@ -58,10 +54,12 @@ class _ExerciseViewState extends State<ExerciseView> {
             var exerciseList = _getExercises();
             var name = exerciseList.elementAt(index).name;
             var weight = exerciseList.elementAt(index).weight.toString();
-            var reps = exerciseList.elementAt(index).sets.toString();
-            var sets = exerciseList.elementAt(index).reps.toString();
+            var sets = exerciseList.elementAt(index).sets.toString();
+            var reps = exerciseList.elementAt(index).reps.toString();
             return GestureDetector(
               onDoubleTap: () async {
+                final exercise = _getExercise(index);
+                _populateTextBoxes(exercise);
                 var updatedValues = await _showTextInputDialog(context);
                 if (updatedValues != null) {
                   _updateExercise(index, updatedValues);
@@ -85,6 +83,21 @@ class _ExerciseViewState extends State<ExerciseView> {
         ));
   }
 
+  _clearTextBox() {
+    _textFieldControllerName.clear();
+    _textFieldControllerWeight.clear();
+    _textFieldControllerSet.clear();
+    _textFieldControllerReps.clear();
+    _textFieldControllerMuscle.clear();
+  }
+
+  _populateTextBoxes(Exercise exercise) {
+    _textFieldControllerName.text = exercise.name;
+    _textFieldControllerWeight.text = exercise.weight.toString();
+    _textFieldControllerSet.text = exercise.sets.toString();
+    _textFieldControllerReps.text = exercise.reps.toString();
+  }
+
   _addExercise() {
     var exercise = Exercise(
       _textFieldControllerName.text,
@@ -99,8 +112,8 @@ class _ExerciseViewState extends State<ExerciseView> {
 
   _getExercise(exerciseID) {
     var box = Hive.box<Exercise>('exerciseBox');
-    var name = box.get(exerciseID);
-    return name;
+    var exercise = box.getAt(exerciseID);
+    return exercise;
   }
 
   _getExercises() {
@@ -133,8 +146,7 @@ class _ExerciseViewState extends State<ExerciseView> {
   final _textFieldControllerWeight = TextEditingController();
   final _textFieldControllerMuscle = TextEditingController();
 
-  Future<Map<int, String>?> _showTextInputDialog(BuildContext context,
-      {currentValues}) async {
+  Future<Map<int, String>?> _showTextInputDialog(BuildContext context) async {
     return showDialog(
         context: context,
         builder: (context) {
