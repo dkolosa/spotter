@@ -62,22 +62,23 @@ class _ExerciseViewState extends State<ExerciseView> {
             var sets = exerciseList.elementAt(index).reps.toString();
             return GestureDetector(
               onDoubleTap: () async {
-                print("Editing Exercise ${index.toString()}");
-                var updated_values = await _showTextInputDialog(context);
-                _updateExercise(index, updated_values);
-                setState(() {});
+                var updatedValues = await _showTextInputDialog(context);
+                if (updatedValues != null) {
+                  _updateExercise(index, updatedValues);
+                  setState(() {});
+                }
               },
               child: Container(
+                padding: const EdgeInsets.all(8),
+                width: 150,
+                height: 40,
                 child: Text(
-                  '${name},  ${weight} lbs,  Sets:${sets},  Reps:${reps}',
+                  '$name,  $weight lbs,  Sets:$sets,  Reps:$reps',
                   textScaleFactor: 1.0,
                   style: const TextStyle(
                     letterSpacing: 1.0,
                   ),
                 ),
-                padding: const EdgeInsets.all(8),
-                width: 150,
-                height: 40,
               ),
             );
           },
