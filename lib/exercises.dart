@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:spotter/model.dart';
+import 'package:intl/intl.dart';
 
 class ExerciseView extends StatefulWidget {
   ExerciseView({super.key});
@@ -13,6 +14,7 @@ class ExerciseView extends StatefulWidget {
 // var box = Hive.openBox<Exercise>('exerciseBox');
 class _ExerciseViewState extends State<ExerciseView> {
   String label = "";
+  DateFormat dateFormat = DateFormat("MM-dd-YYYY");
   // var List<Exercise> exerciseList;
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,7 @@ class _ExerciseViewState extends State<ExerciseView> {
             var weight = exerciseList.elementAt(index).weight.toString();
             var sets = exerciseList.elementAt(index).sets.toString();
             var reps = exerciseList.elementAt(index).reps.toString();
+            var date = exerciseList.elementAt(index).date;
             return GestureDetector(
               onDoubleTap: () async {
                 final exercise = _getExercise(index);
@@ -71,7 +74,7 @@ class _ExerciseViewState extends State<ExerciseView> {
                 width: 150,
                 height: 40,
                 child: Text(
-                  '$name,  $weight lbs,  Sets:$sets,  Reps:$reps',
+                  '$name,  $weight lbs,  Sets:$sets,  Reps:$reps, $date',
                   textScaleFactor: 1.0,
                   style: const TextStyle(
                     letterSpacing: 1.0,
@@ -105,6 +108,7 @@ class _ExerciseViewState extends State<ExerciseView> {
       int.parse(_textFieldControllerSet.text),
       int.parse(_textFieldControllerReps.text),
       _textFieldControllerMuscle.text,
+      dateFormat.format(DateTime.now()),
     );
     var box = Hive.box<Exercise>('exerciseBox');
     box.add(exercise);
@@ -131,6 +135,7 @@ class _ExerciseViewState extends State<ExerciseView> {
       int.parse(updatedValues[2]),
       int.parse(updatedValues[3]),
       updatedValues[4],
+      dateFormat.format(DateTime.now()),
     );
     box.putAt(index, updatedExercise);
   }

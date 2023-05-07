@@ -21,12 +21,16 @@ class Exercise {
   @HiveField(4)
   String muscleGroups = "";
 
+  @HiveField(5)
+  String date = "";
+
   Exercise(
     this.name,
     this.weight,
     this.sets,
     this.reps,
     this.muscleGroups,
+    this.date,
   );
 }
 
