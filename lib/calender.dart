@@ -73,12 +73,13 @@ class _CalenderViewState extends State<CalenderView> {
                 return GestureDetector(
                   onDoubleTap: () async {
                     final exercise = _dBoperations.getExercise(index);
-                    // _populateTextBoxes(exercise);
-                    // var updatedValues = await _showTextInputDialog(context);
-                    // if (updatedValues != null) {
-                    // _updateExercise(index, updatedValues);
-                    setState(() {});
-                    // }
+                    _populateTextBoxes(exercise);
+                    var updatedValues = await _showTextInputDialog(context);
+                    if (updatedValues != null) {
+                      _dBoperations.updateExercise(
+                          index, updatedValues.elementAt(0));
+                      setState(() {});
+                    }
                   },
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
@@ -175,6 +176,13 @@ class _CalenderViewState extends State<CalenderView> {
     _textFieldControllerSet.clear();
     _textFieldControllerReps.clear();
     _textFieldControllerMuscle.clear();
+  }
+
+  _populateTextBoxes(Exercise exercise) {
+    _textFieldControllerName.text = exercise.name;
+    _textFieldControllerWeight.text = exercise.weight.toString();
+    _textFieldControllerSet.text = exercise.sets.toString();
+    _textFieldControllerReps.text = exercise.reps.toString();
   }
 
   _onDaySelected(selectedDay, focusedDay) {

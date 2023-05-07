@@ -34,4 +34,10 @@ class DBoperations {
     var box = Hive.box<Exercise>('exerciseBox');
     box.deleteAll(box.keys);
   }
+
+  void updateExercise(index, updatedValues) async {
+    var box = Hive.box<Exercise>('exerciseBox');
+
+    box.putAt(index, updatedValues);
+  }
 }

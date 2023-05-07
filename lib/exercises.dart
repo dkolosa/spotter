@@ -118,26 +118,6 @@ class _ExerciseViewState extends State<ExerciseView> {
     box.add(exercise);
   }
 
-  // _getExercise(exerciseID) {
-  //   var box = Hive.box<Exercise>('exerciseBox');
-  //   var exercise = box.getAt(exerciseID);
-  //   return exercise;
-  // }
-
-  // _getExercises() {
-  //   var box = Hive.box<Exercise>('exerciseBox');
-  //   final allExercies = box.values;
-  //   return allExercies;
-  // }
-
-  // _getExercisesForDay(selectedDate) {
-  //   var box = Hive.box<Exercise>('exerciseBox');
-  //   var formattedDate = dateFormat.format(selectedDate);
-  //   var fileredExercises =
-  //       box.values.where((exercise) => exercise.date.contains(formattedDate));
-  //   return fileredExercises;
-  // }
-
   _updateExercise(index, updatedValues) async {
     var box = Hive.box<Exercise>('exerciseBox');
 
