@@ -51,9 +51,6 @@ class _StartPageState extends State<StartPage> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-        ),
         drawer: Drawer(
           child: ListView(
             children: [
