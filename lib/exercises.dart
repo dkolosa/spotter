@@ -26,7 +26,7 @@ class _ExerciseViewState extends State<ExerciseView> {
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () async {
-                _dbopetations.deleteExercise();
+                _dbopetations.deleteAllExercises();
                 setState(() {});
               },
               child: const Icon(Icons.delete_forever),

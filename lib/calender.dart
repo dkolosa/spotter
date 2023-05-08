@@ -82,21 +82,37 @@ class _CalenderViewState extends State<CalenderView> {
                     }
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    margin: const EdgeInsets.all(10.0),
-                    width: 150,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.lightBlueAccent),
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    child: Text(
-                      '$name,  $weight lbs,  Sets:$sets,  Reps:$reps',
-                      textScaleFactor: 1.0,
-                      style: const TextStyle(
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                  ),
+                      padding: const EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.all(10.0),
+                      width: 150,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.lightBlueAccent),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: Row(
+                        children: [
+                          Text(
+                            '$name,  $weight lbs,  Sets:$sets,  Reps:$reps',
+                            textScaleFactor: 1.0,
+                            style: const TextStyle(
+                              letterSpacing: 1.0,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 40.0),
+                            child: GestureDetector(
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.redAccent,
+                              ),
+                              onLongPress: () {
+                                _dBoperations.deleteExercise(index);
+                                setState(() {});
+                              },
+                            ),
+                          )
+                        ],
+                      )),
                 );
               },
             ))
