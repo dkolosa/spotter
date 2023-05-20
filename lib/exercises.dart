@@ -37,12 +37,12 @@ class _ExerciseViewState extends State<ExerciseView> {
             child: GestureDetector(
               onTap: () async {
                 Map<int, String>? resultLabel =
-                    await _showTextInputDialog(context);
+                    await _showTextInputDialog(context, null);
                 if (resultLabel != null) {
                   _addExercise();
                   _clearTextBox();
-                  setState(() {});
                 }
+                setState(() {});
               },
               child: const Icon(Icons.add),
             ),
@@ -63,11 +63,11 @@ class _ExerciseViewState extends State<ExerciseView> {
             onDoubleTap: () async {
               var exercise = _dbopetations.getExercise(index);
               _populateTextBoxes(exercise);
-              var updatedValues = await _showTextInputDialog(context);
+              var updatedValues = await _showTextInputDialog(context, index);
               if (updatedValues != null) {
                 _updateExercise(index, updatedValues);
-                setState(() {});
               }
+              setState(() {});
             },
             child: Container(
               padding: const EdgeInsets.all(8),
@@ -132,10 +132,10 @@ class _ExerciseViewState extends State<ExerciseView> {
     box.putAt(index, updatedExercise);
   }
 
-  // _deleteExercise() {
-  //   var box = Hive.box<Exercise>('exerciseBox');
-  //   box.deleteAll(box.keys);
-  // }
+  _deleteExercise(index) {
+    var box = Hive.box<Exercise>('exerciseBox');
+    box.deleteAll(box.keys);
+  }
 
   final _textFieldControllerName = TextEditingController();
   final _textFieldControllerSet = TextEditingController();
@@ -143,7 +143,8 @@ class _ExerciseViewState extends State<ExerciseView> {
   final _textFieldControllerWeight = TextEditingController();
   final _textFieldControllerMuscle = TextEditingController();
 
-  Future<Map<int, String>?> _showTextInputDialog(BuildContext context) async {
+  Future<Map<int, String>?> _showTextInputDialog(
+      BuildContext context, int? index) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -178,6 +179,17 @@ class _ExerciseViewState extends State<ExerciseView> {
               ]),
             ),
             actions: <Widget>[
+              ElevatedButton(
+                  onPressed: () {
+                    if (index != null) {
+                      _deleteExercise(index);
+                      Navigator.pop(context);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
+                  child: const Text("Delete")),
               ElevatedButton(
                 child: const Text("Cancel"),
                 onPressed: () => Navigator.pop(context),
