@@ -51,10 +51,6 @@ class _StartPageState extends State<StartPage> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () => {print("Pressed!")},
-        ),
         drawer: Drawer(
           child: ListView(
             children: [
@@ -65,9 +61,6 @@ class _StartPageState extends State<StartPage> {
               ListTile(
                 leading: const Icon(Icons.calendar_today),
                 title: const Text("Today"),
-                onTap: () {
-                  print("goto main");
-                },
               ),
               ListTile(
                 leading: const Icon(Icons.calendar_month),
