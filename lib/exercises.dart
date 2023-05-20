@@ -26,7 +26,7 @@ class _ExerciseViewState extends State<ExerciseView> {
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () async {
-                _dbopetations.deleteAllExercises();
+                _showDeleteAllDialog(context);
                 setState(() {});
               },
               child: const Icon(Icons.delete_forever),
@@ -37,7 +37,7 @@ class _ExerciseViewState extends State<ExerciseView> {
             child: GestureDetector(
               onTap: () async {
                 Map<int, String>? resultLabel =
-                    await _showTextInputDialog(context, null);
+                    await _showTextInputDialog(context);
                 if (resultLabel != null) {
                   _addExercise();
                   _clearTextBox();
@@ -63,11 +63,11 @@ class _ExerciseViewState extends State<ExerciseView> {
             onDoubleTap: () async {
               var exercise = _dbopetations.getExercise(index);
               _populateTextBoxes(exercise);
-              var updatedValues = await _showTextInputDialog(context, index);
+              var updatedValues = await _showTextInputDialog(context);
               if (updatedValues != null) {
                 _updateExercise(index, updatedValues);
+                setState(() {});
               }
-              setState(() {});
             },
             child: Container(
               padding: const EdgeInsets.all(8),
@@ -85,6 +85,9 @@ class _ExerciseViewState extends State<ExerciseView> {
                 ),
               ),
             ),
+            onLongPress: () => setState(() {
+              _dbopetations.deleteExercise(index);
+            }),
           );
         },
       ),
@@ -143,8 +146,7 @@ class _ExerciseViewState extends State<ExerciseView> {
   final _textFieldControllerWeight = TextEditingController();
   final _textFieldControllerMuscle = TextEditingController();
 
-  Future<Map<int, String>?> _showTextInputDialog(
-      BuildContext context, int? index) async {
+  Future<Map<int, String>?> _showTextInputDialog(BuildContext context) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -180,17 +182,6 @@ class _ExerciseViewState extends State<ExerciseView> {
             ),
             actions: <Widget>[
               ElevatedButton(
-                  onPressed: () {
-                    if (index != null) {
-                      _deleteExercise(index);
-                      Navigator.pop(context);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                  ),
-                  child: const Text("Delete")),
-              ElevatedButton(
                 child: const Text("Cancel"),
                 onPressed: () => Navigator.pop(context),
               ),
@@ -207,6 +198,35 @@ class _ExerciseViewState extends State<ExerciseView> {
                 },
               ),
             ],
+          );
+        });
+  }
+
+  Future<Map<int, String>?> _showDeleteAllDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Delete'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  const Text("Are you Sure you want to delete all data?"),
+                  ElevatedButton(
+                      onPressed: () {
+                        _dbopetations.deleteAllExercises();
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      child: const Text("Delete")),
+                  ElevatedButton(
+                      child: const Text("Cancel"),
+                      onPressed: () => Navigator.pop(context)),
+                ],
+              ),
+            ),
           );
         });
   }
