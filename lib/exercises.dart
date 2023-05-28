@@ -33,7 +33,7 @@ class _ExerciseViewState extends State<ExerciseView> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 20.0),
+            padding: const EdgeInsets.only(right: 30.0),
             child: GestureDetector(
               onTap: () async {
                 Map<int, String>? resultLabel =
@@ -45,6 +45,13 @@ class _ExerciseViewState extends State<ExerciseView> {
                 setState(() {});
               },
               child: const Icon(Icons.add),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: GestureDetector(
+              onTap: () => export_data(),
+              child: const Icon(Icons.save),
             ),
           )
         ],
